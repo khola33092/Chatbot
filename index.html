@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot GPT-3.5 Turbo</title>
+    <title>Chatbot DialoGPT</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,7 +23,7 @@
     </style>
 </head>
 <body>
-    <h1>Chatbot GPT-3.5 Turbo</h1>
+    <h1>Chatbot DialoGPT</h1>
     <input type="text" id="userInput" placeholder="Escribe algo...">
     <button onclick="sendMessage()">Preguntar</button>
     <p id="response"></p>
@@ -41,7 +41,7 @@
             responseElement.innerText = "Cargando...";
 
             try {
-                const API_URL = "https://api-inference.huggingface.co/models/Xenova/gpt-3.5-turbo"; // URL de GPT-3.5 Turbo
+                const API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium"; // Usar modelo DialoGPT
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: {
