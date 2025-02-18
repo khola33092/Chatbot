@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
+    <title>Chatbot GPT-3.5 Turbo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,7 +23,7 @@
     </style>
 </head>
 <body>
-    <h1>Chatbot</h1>
+    <h1>Chatbot GPT-3.5 Turbo</h1>
     <input type="text" id="userInput" placeholder="Escribe algo...">
     <button onclick="sendMessage()">Preguntar</button>
     <p id="response"></p>
@@ -32,7 +32,7 @@
         async function sendMessage() {
             const userInput = document.getElementById("userInput").value;
             const responseElement = document.getElementById("response");
-            
+
             if (userInput.trim() === "") {
                 responseElement.innerText = "Por favor, escribe algo.";
                 return;
@@ -41,29 +41,22 @@
             responseElement.innerText = "Cargando...";
 
             try {
-                const API_URL = "https://api-inference.huggingface.co/models/Denny29/DialoGPT-medium-asunayuuki";
-                const API_TOKEN = "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";  // Tu token aquí
-
+                const API_URL = "https://api-inference.huggingface.co/models/Xenova/gpt-3.5-turbo"; // URL de GPT-3.5 Turbo
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${API_TOKEN}`,
+                        "Authorization": "Bearer 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",  // Tu API key de Hugging Face
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ inputs: userInput })
+                    body: JSON.stringify({
+                        inputs: userInput
+                    })
                 });
 
                 const data = await response.json();
 
-                if (data.hasOwnProperty("error")) {
-                    // Agregar manejo de error en caso de que el modelo esté cargando
-                    if (data.error.includes("currently loading")) {
-                        responseElement.innerText = "El modelo está tardando en cargar, por favor espera un momento.";
-                    } else {
-                        responseElement.innerText = "Error en la API: " + data.error;
-                    }
-                } else if (data.length > 0 && data[0].generated_text) {
-                    responseElement.innerText = data[0].generated_text;
+                if (data && data[0] && data[0].generated_text) {
+                    responseElement.innerText = data[0].generated_text.trim();
                 } else {
                     responseElement.innerText = "No se recibió respuesta del chatbot.";
                 }
