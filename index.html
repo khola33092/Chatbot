@@ -1,4 +1,4 @@
-<!DOCTYPE html><!-- Este es un comentario para forzar la actualización -->
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -29,12 +29,41 @@
     <p id="response"></p>
 
     <script>
-        function sendMessage() {
+        async function sendMessage() {
             const userInput = document.getElementById("userInput").value;
-            if (userInput.trim() !== "") {
-                document.getElementById("response").innerText = "Tu pregunta fue: " + userInput;
-            } else {
-                document.getElementById("response").innerText = "Por favor, escribe algo.";
+            const responseElement = document.getElementById("response");
+            
+            if (userInput.trim() === "") {
+                responseElement.innerText = "Por favor, escribe algo.";
+                return;
+            }
+
+            responseElement.innerText = "Cargando...";
+
+            try {
+                const API_URL = "https://api-inference.huggingface.co/models/Denny29/DialoGPT-medium-asunayuuki";
+                const API_TOKEN = "TU_TOKEN_AQUI"; // Reemplaza con tu token
+
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${API_TOKEN}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ inputs: userInput })
+                });
+
+                const data = await response.json();
+
+                if (data.hasOwnProperty("error")) {
+                    responseElement.innerText = "Error en la API: " + data.error;
+                } else if (data.length > 0 && data[0].generated_text) {
+                    responseElement.innerText = data[0].generated_text;
+                } else {
+                    responseElement.innerText = "No se recibió respuesta del chatbot.";
+                }
+            } catch (error) {
+                responseElement.innerText = "Error al conectar con la API.";
             }
         }
     </script>
