@@ -56,7 +56,12 @@
                 const data = await response.json();
 
                 if (data.hasOwnProperty("error")) {
-                    responseElement.innerText = "Error en la API: " + data.error;
+                    // Agregar manejo de error en caso de que el modelo esté cargando
+                    if (data.error.includes("currently loading")) {
+                        responseElement.innerText = "El modelo está tardando en cargar, por favor espera un momento.";
+                    } else {
+                        responseElement.innerText = "Error en la API: " + data.error;
+                    }
                 } else if (data.length > 0 && data[0].generated_text) {
                     responseElement.innerText = data[0].generated_text;
                 } else {
